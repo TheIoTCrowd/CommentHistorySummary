@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Comment History Summary
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/TheIoTCrowd/CommentHistorySummary
 // @version      0.1.0
 // @description  A quick way to review a user's comment history with number of flags and percentage displayed.
 // @author       Aurora0001
 // @match        https://*.stackexchange.com/admin/users/*/post-comments?state=flagged
 // @match        https://stackoverflow.com/admin/users/*/post-comments?state=flagged
+// @downloadURL  https://github.com/TheIoTCrowd/CommentHistorySummary/raw/master/script.user.js
 // @grant        none
 // ==/UserScript==
 
@@ -18,10 +19,12 @@
     let time_filter = window.location.hash !== "" ? window.location.hash.substring(1) : null;
     let date_limit = new Date();
     if (time_filter === null) {
-            date_limit.setDate(date_limit.getDate() - 10000);
-        } else {
-            date_limit.setDate(date_limit.getDate() - parseInt(time_filter));
-        }
+        // HACK: this just sets the date into the far past so that the filter is essentially infinite. This isn't
+        // a good way of doing it though.
+        date_limit.setDate(date_limit.getDate() - 10000);
+    } else {
+        date_limit.setDate(date_limit.getDate() - parseInt(time_filter));
+    }
 
     $.get(url+"?state=all", data => {
         let ncomments = 0;
